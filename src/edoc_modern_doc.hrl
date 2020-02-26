@@ -41,7 +41,12 @@
 -record(type_tuple, { types = required :: [#type{}] }).
 -record(type_fun, { arg_types = required :: [#type{}], type = required :: #type{} }).
 -record(type_record, { name = required :: string() }).
--record(type_abstract, { name = required :: string(), types = required :: [#type{}] }).
+-record(type_abstract, {
+                         name = required :: string(),
+                         types = required :: [#type{}],
+                         module :: undefined | string(),
+                         href :: undefined | string()
+                       }).
 -record(type_union, { types = required :: [#type{}] }).
 -record(type_nil, { }).
 -type type() :: #type_var{} | #type_atom{} | #type_integer{} |
@@ -59,7 +64,8 @@
 
 -record(argument, {
 	name = required :: string(),
-	description :: #description{} | undefined
+	description :: #description{} | undefined,
+        type :: type() | undefined
 }).
 -record(function, {
 	label = required :: string(),
@@ -67,11 +73,13 @@
 	arity = required :: string(),
 	exported = required :: boolean(),
 	args = [] :: [#argument{}],
+        types = [] :: [#type{}],
 	description :: #description{} | undefined,
 	since :: string() | undefined,
 	deprecated :: #description{} | undefined,
 	see = [] :: [#see{}],
-	todo :: string() | undefined
+	todo :: string() | undefined,
+        returns :: #type{} | undefined
 }).
 
 -record(module, {

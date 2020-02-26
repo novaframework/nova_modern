@@ -11,12 +11,27 @@
 	p/4
 ]).
 
+-include_lib("xmerl/include/xmerl.hrl").
 
 '#xml-inheritance#'() ->
 	[].
 
+'#text#'([{code, Attrs, Code}|Tl]) ->
+    TitleAttr =
+        case proplists:get_value(title, Attrs) of
+            undefined -> [];
+            Value -> [#xmlAttribute{name = title, value = Value}]
+        end,
+    [closing_element(pre, TitleAttr, closing_element(code, [#xmlAttribute{name = class, value = "language-erlang"}], '#text#'(Code)))|'#text#'(Tl)];
+'#text#'([{icode, _Attrs, Code}|Tl]) ->
+    [closing_element(span, [#xmlAttribute{name = class, value="inline-code"}], '#text#'(Code))|'#text#'(Tl)];
+'#text#'([{Type, Attrs, Content}|Tl]) ->
+    AttrsNorm = [ #xmlAttribute{name = Name, value = Value} || {Name, Value} <- Attrs ],
+    [closing_element(Type, AttrsNorm, '#text#'(Content))|'#text#'(Tl)];
+'#text#'([Text|Tl]) when is_list(Text) ->
+    [xmerl_lib:export_text(Text)|'#text#'(Tl)];
 '#text#'(Text) ->
-	xmerl_lib:export_text(Text).
+    xmerl_lib:export_text(Text).
 
 '#root#'(Data, _Attrs, [], _E) ->
 	Data.
@@ -35,6 +50,7 @@ p(Data, Attrs, _Parents, _E) ->
 		false ->
 			closing_element(p, Attrs, Data)
 	end.
+
 
 -spec is_void_element(atom()) -> boolean().
 is_void_element(area) -> true;

@@ -12,9 +12,9 @@
 run(#doclet_gen{sources = Sources, app = App}, #context{dir = OutputDir, env = Env, opts = Options}) ->
 	Docs = [edoc_modern_doc:from_source(filename:join(SourceDir, SourceFile), Env, Options) ||
 		{_Module, SourceFile, SourceDir} <- Sources],
-	gen(OutputDir, App, [Doc || Doc <- Docs, not Doc#module.private, not Doc#module.hidden]);
+    gen(OutputDir, App, [Doc || Doc <- Docs, not Doc#module.private, not Doc#module.hidden]);
 run(#doclet_toc{paths = Paths}, Context) ->
-	io:format("TOC~npaths=~p~ncontext=~p~n", [Paths, Context]).
+	io:format(user, "TOC~npaths=~p~ncontext=~p~n", [Paths, Context]).
 	%toc(Paths, Context).
 
 %% @private
@@ -36,7 +36,9 @@ title(App, Module) ->
 
 %% @private
 navigation(_ModuleName, ModuleDocs) ->
-	[{ul, lists:map(fun (Doc) ->
+	[
+         {input, [{type, "input"}, {placeholder, "Search Nova docs"}, {class, "searchbox"}], []},
+         {ul, lists:map(fun (Doc) ->
 		Href = Doc#module.name ++ ".html",
 		{li, [
 			{a, [{href, Href}], [Doc#module.name]},
@@ -61,15 +63,18 @@ layout(Title, Navigation, Content) ->
 			meta([{name, "viewport"}, {content, "width=device-width, initial-scale=1.0"}]),
 			meta([{name, "generator"}, {content, "EDoc"}]),
 			{title, [Title]},
-			{link, [{rel, "stylesheet"}, {href, "assets/app.css"}], []}
+			{link, [{rel, "stylesheet"}, {href, "assets/app.css"}], []},
+			{link, [{rel, "stylesheet"}, {href, "assets/github.css"}], []},
+                        {script, [{src, "assets/highlight.min.js"}], []},
+                        {script, [], ["hljs.initHighlightingOnLoad();"]}
 		]},
-		{body, [
-			{'div', [{id, app}], [
-				{nav, [{id, 'app-navigation'}], Navigation},
-				{main, [{id, 'app-content'}], Content}
-			]}
-		]}
-	]}].
+                 {body, [
+                         {'div', [{id, app}], [
+                                               {'div', [{id, 'app-navigation'}], Navigation},
+                                               {main, [{id, 'app-content'}], Content}
+                                              ]}
+                        ]}
+                ]}].
 
 %% @private
 meta(Attributes) ->
@@ -77,13 +82,16 @@ meta(Attributes) ->
 
 %% @private
 write_html(OutputDir, OutputName, Xml) ->
-	Html = xmerl:export_simple(Xml, edoc_modern_xmerl_html5, []),
-	edoc_lib:write_file(Html, OutputDir, OutputName, [{encoding, utf8}]).
+    Html = xmerl:export_simple(Xml, edoc_modern_xmerl_html5, []),
+    edoc_lib:write_file(Html, OutputDir, OutputName, [{encoding, utf8}]).
 
 %% @private
 copy_assets(ToDir) ->
-	FromDir = code:priv_dir(?MODULE),
-	ok = copy_asset(FromDir, ToDir, "app.css").
+    FromDir = code:priv_dir(?MODULE),
+    ok = copy_asset(FromDir, ToDir, "app.css"),
+    ok = copy_asset(FromDir, ToDir, "github.css"),
+    ok = copy_asset(FromDir, ToDir, "highlight.min.js"),
+    ok = copy_asset(FromDir, ToDir, "todo-icon.png").
 
 %% @private
 copy_asset(FromDir, ToDir, Name) ->
