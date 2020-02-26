@@ -123,3 +123,10 @@ p.todo
      overflow: hidden;
      padding: 15px 60px;
 }
+
+span.inline-code {
+    font:12px Monaco,Consolas,"Andale  Mono","DejaVu Sans Mono",monospace;
+    background-color: #EEE;
+    color: #DD0000;
+    padding: 2px;
+}
