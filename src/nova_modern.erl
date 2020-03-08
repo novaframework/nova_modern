@@ -1,16 +1,16 @@
--module(edoc_modern).
+-module(nova_modern).
 -export([
 	run/2
 ]).
 
 -include_lib("edoc/include/edoc_doclet.hrl").
--include("./edoc_modern_doc.hrl").
+-include("./nova_modern_doc.hrl").
 
 
 %% @doc Main doclet entry point.
 -spec run(#doclet_gen{} | #doclet_toc{}, #context{}) -> ok.
 run(#doclet_gen{sources = Sources, app = App}, #context{dir = OutputDir, env = Env, opts = Options}) ->
-	Docs = [edoc_modern_doc:from_source(filename:join(SourceDir, SourceFile), Env, Options) ||
+	Docs = [nova_modern_doc:from_source(filename:join(SourceDir, SourceFile), Env, Options) ||
 		{_Module, SourceFile, SourceDir} <- Sources],
     gen(OutputDir, App, [Doc || Doc <- Docs, not Doc#module.private, not Doc#module.hidden]);
 run(#doclet_toc{paths = Paths}, Context) ->
@@ -19,10 +19,10 @@ run(#doclet_toc{paths = Paths}, Context) ->
 
 %% @private
 gen(OutputDir, App, Docs) ->
-	lists:foreach(fun (#module{name = ModuleName} = ModuleDoc) ->
+	lists:foreach(fun (#module{name = ModuleName} = Modulnova) ->
 		Title = title(App, ModuleName),
 		Navigation = navigation(ModuleName, Docs),
-		Content = content(ModuleDoc),
+		Content = content(Modulnova),
 		OutputName = ModuleName ++ ".html",
 		write_html(OutputDir, OutputName, layout(Title, Navigation, Content))
 	end, Docs),
@@ -82,7 +82,7 @@ meta(Attributes) ->
 
 %% @private
 write_html(OutputDir, OutputName, Xml) ->
-    Html = xmerl:export_simple(Xml, edoc_modern_xmerl_html5, []),
+    Html = xmerl:export_simple(Xml, nova_modern_xmerl_html5, []),
     edoc_lib:write_file(Html, OutputDir, OutputName, [{encoding, utf8}]).
 
 %% @private

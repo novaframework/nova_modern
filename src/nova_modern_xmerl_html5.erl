@@ -1,5 +1,5 @@
 %% @private
--module(edoc_modern_xmerl_html5).
+-module(nova_modern_xmerl_html5).
 -export([
 	'#xml-inheritance#'/0
 ]).

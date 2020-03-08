@@ -1,10 +1,10 @@
 %% @private
--module(edoc_modern_doc_html).
+-module(nova_modern_doc_html).
 -export([
          module/1
         ]).
 
--include("./edoc_modern_doc.hrl").
+-include("./nova_modern_doc.hrl").
 
 -spec module(#module{}) -> [tuple()].
 module(#module{name = Name, description = Description, types = Types, functions = Functions, todo = Todo}) ->

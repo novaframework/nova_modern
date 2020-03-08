@@ -1,5 +1,5 @@
-{application, edoc_modern, [
-	{description, "A modern layout for edoc"},
+{application, nova_modern, [
+	{description, "A modern layout for nova"},
 	{vsn, "0.1.0"},
 	{registered, []},
 	{applications, [

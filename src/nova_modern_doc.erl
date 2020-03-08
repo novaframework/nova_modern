@@ -1,5 +1,5 @@
 %% @private
--module(edoc_modern_doc).
+-module(nova_modern_doc).
 -export([
          from_source/3
         ]).
@@ -10,7 +10,7 @@
 
 
 -include_lib("xmerl/include/xmerl.hrl").
--include("./edoc_modern_doc.hrl").
+-include("./nova_modern_doc.hrl").
 
 -spec from_source(string(), term(), proplists:proplist()) -> {Module :: atom(), #module{}}.
 from_source(Source, Env, Options) ->
@@ -19,7 +19,7 @@ from_source(Source, Env, Options) ->
 
 -spec to_html(#module{}) -> [tuple()].
 to_html(#module{} = Doc) ->
-    edoc_modern_doc_html:module(Doc).
+    nova_modern_doc_html:module(Doc).
 
 %% @private
 module(#xmlElement{name = module, attributes = Attributes, content = Content}) ->
