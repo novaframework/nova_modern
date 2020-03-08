@@ -52,7 +52,7 @@ navigation(_ModuleName, ModuleDocs) ->
 
 %% @private
 content(ModuleDocs) ->
-	edoc_modern_doc:to_html(ModuleDocs).
+	nova_modern_doc:to_html(ModuleDocs).
 
 %% @private
 layout(Title, Navigation, Content) ->
