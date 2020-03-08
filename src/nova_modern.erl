@@ -87,7 +87,7 @@ write_html(OutputDir, OutputName, Xml) ->
 
 %% @private
 copy_assets(ToDir) ->
-    FromDir = code:priv_dir(?MODULE),
+    FromDir = code:priv_dir("nova_modern"),
     ok = copy_asset(FromDir, ToDir, "app.css"),
     ok = copy_asset(FromDir, ToDir, "github.css"),
     ok = copy_asset(FromDir, ToDir, "highlight.min.js"),
