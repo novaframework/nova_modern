@@ -9,5 +9,6 @@
 		xmerl
 	]},
 	{env,[]},
-	{modules, []}
+	{modules, []},
+	{licenses, ["Apache 2.0"]}
 ]}.
