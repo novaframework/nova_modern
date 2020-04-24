@@ -66,6 +66,8 @@ layout(Title, Navigation, Content) ->
 			{link, [{rel, "stylesheet"}, {href, "assets/app.css"}], []},
 			{link, [{rel, "stylesheet"}, {href, "assets/github.css"}], []},
                         {script, [{src, "assets/highlight.min.js"}], []},
+                        {script, [{src, "assets/jquery-3.5.0.min.js"}], []},
+                        {script, [{src, "assets/nova_modern.js"}], []},
                         {script, [], ["hljs.initHighlightingOnLoad();"]}
 		]},
                  {body, [
@@ -91,6 +93,8 @@ copy_assets(ToDir) ->
     ok = copy_asset(FromDir, ToDir, "app.css"),
     ok = copy_asset(FromDir, ToDir, "github.css"),
     ok = copy_asset(FromDir, ToDir, "highlight.min.js"),
+    ok = copy_asset(FromDir, ToDir, "jquery-3.5.0.min.js"),
+    ok = copy_asset(FromDir, ToDir, "nova_modern.js"),
     ok = copy_asset(FromDir, ToDir, "todo-icon.png").
 
 %% @private

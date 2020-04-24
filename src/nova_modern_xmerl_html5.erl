@@ -16,6 +16,8 @@
 '#xml-inheritance#'() ->
 	[].
 
+'#text#'([{binary, _, Contains}|Tl]) ->
+    ["&#60;&#60;", '#text#'(Contains), "&#62;&#62;"|'#text#'(Tl)];
 '#text#'([{code, Attrs, Code}|Tl]) ->
     TitleAttr =
         case proplists:get_value(title, Attrs) of
@@ -23,6 +25,11 @@
             Value -> [#xmlAttribute{name = title, value = Value}]
         end,
     [closing_element(pre, TitleAttr, closing_element(code, [#xmlAttribute{name = class, value = "language-erlang"}], '#text#'(Code)))|'#text#'(Tl)];
+'#text#'([{options, Attrs, Options}|Tl]) ->
+    [closing_element(b, [#xmlAttribute{name = class, value="options-title"}], "Options")|'#text#'(Options)];
+'#text#'([{option, Attrs, Text}|Tl]) ->
+    ForAttr = proplists:get_value(for, Attrs),
+    [closing_element(p, [], [closing_element(span, [#xmlAttribute{name = class, value="inline-code"}], ForAttr)|'#text#'(Text)])|'#text#'(Tl)];
 '#text#'([{icode, _Attrs, Code}|Tl]) ->
     [closing_element(span, [#xmlAttribute{name = class, value="inline-code"}], '#text#'(Code))|'#text#'(Tl)];
 '#text#'([{Type, Attrs, Content}|Tl]) ->
