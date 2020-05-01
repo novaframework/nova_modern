@@ -10,8 +10,8 @@
 %% @doc Main doclet entry point.
 -spec run(#doclet_gen{} | #doclet_toc{}, #context{}) -> ok.
 run(#doclet_gen{sources = Sources, app = App}, #context{dir = OutputDir, env = Env, opts = Options}) ->
-	Docs = [nova_modern_doc:from_source(filename:join(SourceDir, SourceFile), Env, Options) ||
-		{_Module, SourceFile, SourceDir} <- Sources],
+	Docs = [index | [nova_modern_doc:from_source(filename:join(SourceDir, SourceFile), Env, Options) ||
+		{_Module, SourceFile, SourceDir} <- Sources]],
     gen(OutputDir, App, [Doc || Doc <- Docs, not Doc#module.private, not Doc#module.hidden]);
 run(#doclet_toc{paths = Paths}, Context) ->
 	io:format(user, "TOC~npaths=~p~ncontext=~p~n", [Paths, Context]).
@@ -20,11 +20,17 @@ run(#doclet_toc{paths = Paths}, Context) ->
 %% @private
 gen(OutputDir, App, Docs) ->
 	lists:foreach(fun (#module{name = ModuleName} = Modulnova) ->
-		Title = title(App, ModuleName),
-		Navigation = navigation(ModuleName, Docs),
-		Content = content(Modulnova),
-		OutputName = ModuleName ++ ".html",
-		write_html(OutputDir, OutputName, layout(Title, Navigation, Content))
+	    case ModuleName of
+			index ->
+				Navigation = navigation(ModuleName, Docs),
+				write_html(OutputDir, "index.html", layout("", Navigation, ""));
+			_ ->      
+				Title = title(App, ModuleName),
+				Navigation = navigation(ModuleName, Docs),
+				Content = content(Modulnova),
+				OutputName = ModuleName ++ ".html",
+				write_html(OutputDir, OutputName, layout(Title, Navigation, Content))
+		end
 	end, Docs),
 	copy_assets(filename:join(OutputDir, "assets")).
 
