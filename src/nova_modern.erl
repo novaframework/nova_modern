@@ -20,17 +20,11 @@ run(#doclet_toc{paths = Paths}, Context) ->
 %% @private
 gen(OutputDir, App, Docs) ->
 	lists:foreach(fun (#module{name = ModuleName} = Modulnova) ->
-	    case ModuleName of
-			index ->
-				Navigation = navigation(ModuleName, Docs),
-				write_html(OutputDir, "index.html", layout("", Navigation, ""));
-			_ ->      
 				Title = title(App, ModuleName),
 				Navigation = navigation(ModuleName, Docs),
 				Content = content(Modulnova),
 				OutputName = ModuleName ++ ".html",
 				write_html(OutputDir, OutputName, layout(Title, Navigation, Content))
-		end
 	end, Docs),
 	copy_assets(filename:join(OutputDir, "assets")).
 
