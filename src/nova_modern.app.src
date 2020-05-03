@@ -1,6 +1,6 @@
 {application, nova_modern, [
 	{description, "A modern layout for nova"},
-	{vsn, "0.1.1"},
+	{vsn, "0.1.2"},
 	{registered, []},
 	{applications, [
 		kernel,
